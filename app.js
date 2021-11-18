@@ -6,6 +6,8 @@ const {db, Pages, Users} = require('./models');
 const {cyan} = require('chalk');
 const app = express();
 const { addPage, editPage, main, userList, userPages, wikiPage } = require('./views');
+const wikiRouter = require('./routes/wiki');
+const userRouter = require('./routes/users')
 
 const staticMiddleware = express.static(path.join(__dirname, 'public'));
 
@@ -31,6 +33,9 @@ app.get('/', async (req, res) => {
   console.log(returnHtml);
   res.send(returnHtml);
 })
+
+app.use('/wiki', wikiRouter);
+app.use('/users', userRouter);
 
 const init = async () => {
   await db.sync();
