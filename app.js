@@ -7,7 +7,9 @@ const {cyan} = require('chalk');
 const app = express();
 const { addPage, editPage, main, userList, userPages, wikiPage } = require('./views');
 const wikiRouter = require('./routes/wiki');
-const userRouter = require('./routes/users')
+const userRouter = require('./routes/users');
+// const bodyParser = require('body-parser');
+
 
 const staticMiddleware = express.static(path.join(__dirname, 'public'));
 
@@ -21,21 +23,23 @@ db.authenticate()
   });
 
 app.get('/', async (req, res) => {
-  const returnHtml = html`
-  <!DOCTYPE HTML>
-  <head>
-    <title>Hello World</title>
-  </head>
-  <body>
-    <p>Hello World!</p>
-  </body>
-  `
-  console.log(returnHtml);
-  res.send(returnHtml);
+  res.redirect('/wiki')
 })
 
 app.use('/wiki', wikiRouter);
 app.use('/users', userRouter);
+
+app.use((req, res, next) => {
+  try {
+    res.send("404")
+  } catch (error) {
+    next(error)
+  } 
+})
+
+app.use((err, req, res, next) => {
+  console.log(err.stack);
+})
 
 const init = async () => {
   await db.sync();

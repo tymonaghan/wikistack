@@ -18,6 +18,7 @@ const Pages = db.define('pages', {
     type: Sequelize.ENUM('open', 'closed'),
     defaultValue: 'open',
   },
+  
 })
 
 const Users = db.define('users', {
